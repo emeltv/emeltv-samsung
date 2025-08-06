@@ -1,70 +1,104 @@
 # Emel TV - Tizen Stream Player
 
-A simple and robust Tizen web application designed to play a full-screen HLS video stream on Samsung Smart TVs. This project serves as a lightweight template for TV-based streaming applications, incorporating essential lifecycle management and common troubleshooting fixes.
+A simple and robust Tizen web application designed to play a full-screen HLS video stream on Samsung Smart TVs. This project serves as a lightweight yet powerful template for TV-based streaming applications, incorporating essential lifecycle management, remote control handling, and common troubleshooting fixes.
 
-## Features
+---
 
-- Plays a specified HLS (.m3u8) stream upon launch.
-- Full-screen video playback.
-- Handles basic remote control events (Play, Pause, Return/Exit).
-- Correctly manages the application lifecycle (pausing on hide, cleaning up on exit) to prevent resource allocation errors on the TV.
-- Includes necessary fixes for common Tizen development issues like the "black screen with audio" problem.
+## ✨ Key Features
 
-## Tech Stack
+-   **HLS Streaming**: Plays a specified HLS (`.m3u8`) stream immediately on launch.
+-   **Full-Screen Playback**: Utilizes the entire screen for an immersive viewing experience.
+-   **Remote Control Ready**: Handles essential remote control events (**Play**, **Pause**, **Return/Exit**).
+-   **Robust App Lifecycle Management**: Correctly pauses the stream when the app is hidden and cleans up resources on exit to prevent common `AVPlay` errors on the TV.
+-   **Black Screen Fix**: Includes the necessary `setDisplayRect` API calls to prevent the common "black screen with audio" issue on Tizen TVs.
+-   **Error Handling**: Basic listeners to handle stream and player errors.
 
-- **HTML5**: For the basic application structure.
-- **CSS3**: For styling the player container.
-- **JavaScript (ES6+)**: For all application logic.
-- **Tizen Web API**: Specifically `webapis.avplay` for media playback and `tizen.application` for app control.
+---
 
-## Project Structure
+## 🛠️ Tech Stack
 
-The project follows a standard Tizen web application structure. Key source files include:
+-   **HTML5**: Core application structure.
+-   **CSS3**: Minimal styling for the player container.
+-   **JavaScript (ES6+)**: All application logic.
+-   **Tizen Web API**:
+    -   `webapis.avplay` for media playback.
+    -   `tizen.application` for application lifecycle control.
+    -   `tizen.tvinputdevice` for registering remote control keys.
+
+---
+
+## 📂 Project Structure
+
+The project follows a standard Tizen web application structure.
 
 ```
+.
 ├── css/
 │   └── style.css       # Styles for the player object and body
-├── config.xml          # Tizen application configuration, privileges, and metadata
+├── js/
+│   └── main.js         # Main application logic
+├── config.xml          # Tizen app configuration, privileges, and metadata
 ├── icon.png            # Application icon
-├── index.html          # Entry point of the application
-└── main.js             # Main application logic
+└── index.html          # HTML entry point of the application
 ```
 
-## Setup and Installation
 
-To run this application, you will need [Tizen Studio](https://developer.tizen.org/development/tizen-studio/download) installed and configured for TV development.
+---
+
+## 🚀 Getting Started
+
+Follow these instructions to get the project running on your own Samsung TV.
+
+### Prerequisites
+
+-   [**Tizen Studio**](https://developer.tizen.org/development/tizen-studio/download) installed (with TV extensions).
+-   A **Samsung Smart TV** connected to the same network as your computer, with **Developer Mode** enabled.
+-   A **Samsung Developer Certificate** configured in Tizen Studio.
+
+### Installation
 
 1.  **Clone the Repository:**
-
     ```bash
-    git clone <your-repository-url>
+    git clone [https://your-repository-url.git](https://your-repository-url.git)
+    cd emel-tv
     ```
 
-2.  **Import Project:**
+2.  **Import into Tizen Studio:**
+    -   Open Tizen Studio.
+    -   Go to `File > Import...`.
+    -   Select `Tizen > Tizen Project` and browse to the cloned repository folder.
+    -   Check the project and click `Finish`.
 
-    - Open Tizen Studio.
-    - Go to `File > Import...`.
-    - Select `Tizen > Tizen Project` and navigate to the cloned repository folder.
-    - Import the project.
+3.  **Configure the Stream URL:**
+    -   Open the `js/main.js` file.
+    -   Change the `STREAM_URL` constant to your desired `.m3u8` stream link.
+        ```javascript
+        // The URL of the HLS stream to be played.
+        const STREAM_URL = "https://your-stream-url.m3u8";
+        ```
 
-3.  **Build the Project:**
+4.  **Build and Run:**
+    -   Connect your Samsung TV to Tizen Studio using the **Device Manager**.
+    -   Right-click the project in the **Project Explorer**.
+    -   Select **Run As > Tizen Web Application**.
+    -   Ensure your TV is selected as the target. The app will be installed and launched automatically.
 
-    - Right-click the project in the Project Explorer.
-    - Select `Build Project`. This will generate a `.wgt` (widget) file.
+---
 
-4.  **Run on a Device:**
-    - Connect your Samsung TV to Tizen Studio via the Device Manager.
-    - Right-click the project.
-    - Select `Run As > Tizen Web Application`.
-    - Ensure your TV is selected as the target. The application will be installed and launched on the TV.
+## 🎮 Controls
 
-## Configuration
+The application responds to the following remote control keys:
 
-To change the video stream, edit the `STREAM_URL` constant in `main.js`:
+| Key            | Action                  |
+| -------------- | ----------------------- |
+| **Play/Pause** | Toggles between play and pause. |
+| **Return** | Exits the application.  |
+| **Exit** | Exits the application.  |
 
-```javascript
-// main.js
+---
 
-// The URL of the HLS stream to be played.
-const STREAM_URL = "https://your-new-stream-url.m3u8";
-```
+## 💡 Troubleshooting
+
+-   **Black Screen with Audio:** This is a common issue where the video is not rendered. This template fixes it by correctly setting the video display area using `webapis.avplay.setDisplayRect()`.
+-   **"Player not available" Error:** This often happens if you try to use `AVPlay` APIs after the app has been closed or before it's ready. The lifecycle management in `main.js` (`application.hide` and `visibilitychange` listeners) is designed to prevent this by properly closing the player.
+-   **Connection Issues:** Ensure your computer and TV are on the **same network** and that you've entered your computer's IP address correctly in the TV's Developer Mode settings.
